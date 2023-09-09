@@ -88,7 +88,7 @@ public class MapGenerator : MonoBehaviour
                     {
                         if (x == treeList[i].roomLeftBottom.x || x == treeList[i].roomRightTop.x
                             || treeList[i].roomLeftBottom.y == y || treeList[i].roomRightTop.y == y)
-                            map[y, x] = 1; // 끝부분은 벽
+                            map[y, x] = 1; // 끝부분은 벽, 타일 맵 까는거로 변경해야함
                         else
                             map[y, x] = 3; // 안쪽은 바닥으로 채움
                     }
@@ -107,17 +107,52 @@ public class MapGenerator : MonoBehaviour
                     if (treeList[i].pNode.roomRightTop.x - treeList[i].pNode.roomLeftBottom.x  // 가로가 더 길다면 = 세로 선으로 자른거라면
                         > treeList[i].pNode.roomRightTop.y - treeList[i].pNode.roomLeftBottom.y)
                     {
-                        int temp = (treeList[i].pNode.leftNode.rightTop.y + treeList[i].pNode.leftNode.leftBottom.y) / 2; // 자른 노드 사이의 중간 높이?
-                        //int line = new Line(new Vector3Int(treeList[i]))
+                        int temp = (treeList[i].pNode.leftNode.leftBottom.y + treeList[i].pNode.leftNode.rightTop.y) / 2; // 자른 노드 사이의 중간 높이? 구하고
+                        Line line = new Line(
+                            new Vector3Int(treeList[i].pNode.leftNode.rightTop.x - 2, temp, 0), 
+                            new Vector3Int(treeList[i].pNode.rightNode.leftBottom.x + 2, temp, 0));
+                        lineList.Add(line);
+                        MakeLine(line);
+                    }
+                    else
+                    {
+                        int temp = (treeList[i].pNode.leftNode.leftBottom.x + treeList[i].pNode.leftNode.rightTop.x) / 2;
+                        Line line = new Line(
+                            new Vector3Int(temp, treeList[i].pNode.leftNode.rightTop.y -2 , 0),
+                            new Vector3Int(temp, treeList[i].pNode.rightNode.leftBottom.y + 2, 0));
+                        lineList.Add(line);
+                        MakeLine(line);
                     }
                 }
             }
         }
     }
 
+    private void MakeLine(Line line)
+    {
+        if (line.lineNode1.x == line.lineNode2.x) // 만약에 X가 같다면 = 세로선이다
+            for (int i = line.lineNode1.y; i < line.lineNode2.y; i++)
+                map[i, line.lineNode1.x] = 2; // 방 사이 이동하는 통로 // 타일맵 까는걸로 변경해야함
+        else 
+            for (int i = line.lineNode1.x; i < line.lineNode2.x; i++)
+                map[line.lineNode1.y, i] = 2;
+    }
+
     private void MakeWall()
     {
-
+        for (int y = 0; y <= rightTop.y; y++)
+        {
+            for (int x = 0; x <= rightTop.x; x++)
+            {
+                if (map[y, x] == 2)
+                {
+                    for (int i = -1; i <= 1; i++)
+                        for (int j = -1; j <= 1; j++)
+                            if (map[y + j, x + i] == 0)
+                                map[y + j, x + i] = 1; // 벽 // 타일맵 까는걸로 변경해야함
+                }
+            }
+        }
     }
 
     private void GenerateTilemap()
