@@ -60,7 +60,7 @@ public class BSPNode
         if (!isDivided) // 최소치라 안잘렸다면
         {               // disFrom만큼 벽에서 떨어진 방의 크기를 구함
             roomLeftBottom = new Vector2Int(leftBottom.x + disFrom, leftBottom.y + disFrom);
-            roomRightTop = new Vector2Int(rightTop.x - disFrom, rightTop.y - disFrom);
+            roomRightTop = new Vector2Int(rightTop.x - 1 - disFrom, rightTop.y - 1 - disFrom);
         }
     }
 }
