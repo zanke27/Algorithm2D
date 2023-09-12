@@ -56,7 +56,7 @@ public class BSPNode
 
     public void RoomCreate()
     {
-        int disFrom = 2;
+        int disFrom = 3;
         if (!isDivided) // 최소치라 안잘렸다면
         {               // disFrom만큼 벽에서 떨어진 방의 크기를 구함
             roomLeftBottom = new Vector2Int(leftBottom.x + disFrom, leftBottom.y + disFrom);

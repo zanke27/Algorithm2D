@@ -41,8 +41,11 @@ public class MapGenerator : MonoBehaviour
     private int[,] map;
     // 벽: 1 / 통로: 2 / 바닥: 3
 
+    public int num;
+
     [SerializeField] private Tile wall;
     [SerializeField] private Tile road;
+    [SerializeField] private Tile place;
     [SerializeField] private Tilemap wallTilemap;
     [SerializeField] private Tilemap roadTilemap;
 
@@ -139,8 +142,8 @@ public class MapGenerator : MonoBehaviour
                     {
                         int temp = (treeList[x].pNode.leftNode.leftBottom.y + treeList[x].pNode.leftNode.rightTop.y) / 2; // 자른 노드 사이의 중간 높이? 구하고
                         Line line = new Line(
-                            new Vector3Int(treeList[x].pNode.leftNode.rightTop.x - 4, temp, 0), 
-                            new Vector3Int(treeList[y].pNode.rightNode.leftBottom.x + 4, temp, 0));
+                            new Vector3Int(treeList[x].pNode.leftNode.rightTop.x - num, temp, 0), 
+                            new Vector3Int(treeList[y].pNode.rightNode.leftBottom.x + num - 1, temp, 0));
                         lineList.Add(line);
                         MakeLine(line);
                     }
@@ -149,8 +152,8 @@ public class MapGenerator : MonoBehaviour
                     {
                         int temp = (treeList[x].pNode.leftNode.leftBottom.x + treeList[x].pNode.leftNode.rightTop.x) / 2;
                         Line line = new Line(
-                            new Vector3Int(temp, treeList[x].pNode.leftNode.rightTop.y - 4, 0),
-                            new Vector3Int(temp, treeList[y].pNode.rightNode.leftBottom.y + 4, 0));
+                            new Vector3Int(temp, treeList[x].pNode.leftNode.rightTop.y - num, 0),
+                            new Vector3Int(temp, treeList[y].pNode.rightNode.leftBottom.y + num - 1, 0));
                         lineList.Add(line);
                         MakeLine(line);
                     }
@@ -162,14 +165,14 @@ public class MapGenerator : MonoBehaviour
     private void MakeLine(Line line)
     {
         if (line.lineNode1.x == line.lineNode2.x) // 만약에 X가 같다면 = 세로선이다
-            for (int y = line.lineNode1.y; y < line.lineNode2.y; y++)
+            for (int y = line.lineNode1.y; y <= line.lineNode2.y; y++)
                 map[y, line.lineNode1.x] = 2; // 방 사이 이동하는 통로
         else 
-            for (int x = line.lineNode1.x; x < line.lineNode2.x; x++)
+            for (int x = line.lineNode1.x; x <= line.lineNode2.x; x++)
                 map[line.lineNode1.y, x] = 2;
     }
 
-    void ExtendLine()
+    private void ExtendLine()
     {
         for (int i = 0; i < lineList.Count; i++) // 라인 전체를 돌면서
         {
@@ -258,8 +261,10 @@ public class MapGenerator : MonoBehaviour
             {
                 if (map[y, x] == 1)
                     wallTilemap.SetTile(new Vector3Int(x, y, 0), wall);
-                else if (map[y, x] == 2 || map[y, x] == 3)
+                else if (map[y, x] == 2)
                     roadTilemap.SetTile(new Vector3Int(x, y, 0), road);
+                else if (map[y, x] == 3)
+                    roadTilemap.SetTile(new Vector3Int(x, y, 0), place);
             }
 
     }
@@ -278,6 +283,14 @@ public class MapGenerator : MonoBehaviour
                 Vector3 center = new Vector3(room.rightTop.x - (x / 2), room.rightTop.y - (y / 2));
                 Gizmos.DrawWireCube(center, size);
             }
+            foreach (var line in lineList)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireCube(new Vector3(line.lineNode1.x + 0.5f, line.lineNode1.y + 0.5f, 0), Vector3.one);
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireCube(new Vector3(line.lineNode2.x + 0.5f, line.lineNode2.y + 0.5f, 0), Vector3.one);
+            }
+
         }
     }
 #endif

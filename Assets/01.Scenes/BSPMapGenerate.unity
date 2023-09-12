@@ -411,8 +411,10 @@ MonoBehaviour:
   rightTop: {x: 60, y: 60}
   roomMinSize: 14
   maxDepth: 4
+  num: 4
   wall: {fileID: 11400000, guid: f5103e7c3313a8a4095680db85982ee4, type: 2}
-  road: {fileID: 11400000, guid: f00622eefb79a3643b22ce4a06dad0f6, type: 2}
+  road: {fileID: 11400000, guid: f397b70c0f7692247a197eb23b4ae239, type: 2}
+  place: {fileID: 11400000, guid: f00622eefb79a3643b22ce4a06dad0f6, type: 2}
   wallTilemap: {fileID: 1972110402}
   roadTilemap: {fileID: 2102961597}
 --- !u!1 &1743916597
