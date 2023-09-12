@@ -41,8 +41,6 @@ public class MapGenerator : MonoBehaviour
     private int[,] map;
     // 벽: 1 / 통로: 2 / 바닥: 3
 
-    public int num;
-
     [SerializeField] private Tile wall;
     [SerializeField] private Tile road;
     [SerializeField] private Tile place;
@@ -73,20 +71,6 @@ public class MapGenerator : MonoBehaviour
         ExtendLine();
         isDrawable = true;
         MakeWall();
-        
-        //string str = "";
-        //for (int i = 0; i < rightTop.y; i++)
-        //{
-        //    for (int j = 0; j < rightTop.x; j++)
-        //    {
-        //        str += map[i, j].ToString();
-        //        str += " ";
-        //        if (map[i, j] == 1)
-        //            str += " ";
-        //    }
-        //    str += "\n";
-        //}
-        //Debug.Log(str);
 
         GenerateTilemap();
     }
@@ -142,8 +126,8 @@ public class MapGenerator : MonoBehaviour
                     {
                         int temp = (treeList[x].pNode.leftNode.leftBottom.y + treeList[x].pNode.leftNode.rightTop.y) / 2; // 자른 노드 사이의 중간 높이? 구하고
                         Line line = new Line(
-                            new Vector3Int(treeList[x].pNode.leftNode.rightTop.x - num, temp, 0), 
-                            new Vector3Int(treeList[y].pNode.rightNode.leftBottom.x + num - 1, temp, 0));
+                            new Vector3Int(treeList[x].pNode.leftNode.rightTop.x - 4, temp, 0), 
+                            new Vector3Int(treeList[y].pNode.rightNode.leftBottom.x + 4 - 1, temp, 0));
                         lineList.Add(line);
                         MakeLine(line);
                     }
@@ -152,8 +136,8 @@ public class MapGenerator : MonoBehaviour
                     {
                         int temp = (treeList[x].pNode.leftNode.leftBottom.x + treeList[x].pNode.leftNode.rightTop.x) / 2;
                         Line line = new Line(
-                            new Vector3Int(temp, treeList[x].pNode.leftNode.rightTop.y - num, 0),
-                            new Vector3Int(temp, treeList[y].pNode.rightNode.leftBottom.y + num - 1, 0));
+                            new Vector3Int(temp, treeList[x].pNode.leftNode.rightTop.y - 4, 0),
+                            new Vector3Int(temp, treeList[y].pNode.rightNode.leftBottom.y + 4 - 1, 0));
                         lineList.Add(line);
                         MakeLine(line);
                     }
